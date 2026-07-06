@@ -18,49 +18,46 @@
             text-align: center;
         }
         .container {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.85);
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.9);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 90%;
+            max-width: 85%;
             width: 320px;
-            position: relative;
             z-index: 10;
         }
         h1 {
             color: #ff4d6d;
             font-size: 24px;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
-        .buttons {
+        .buttons-wrapper {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
+            gap: 30px; /* Tugmalarni majburiy yonma-yon qilish uchun masofa */
             align-items: center;
-            height: 80px;
-            position: relative;
+            width: 100%;
+            height: 60px;
         }
         button {
-            padding: 12px 28px;
+            padding: 12px 30px;
             font-size: 18px;
             font-weight: bold;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: transform 0.1s ease;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         #yesBtn {
             background-color: #2ecc71;
             color: white;
-            z-index: 5;
         }
         #noBtn {
             background-color: #e74c3c;
             color: white;
-            position: absolute;
-            z-index: 10;
+            transition: all 0.1s ease;
         }
-        /* Tabrik sahifasi uslubi */
+        /* Tabrik sahifasi */
         .celebration {
             display: none;
             position: fixed;
@@ -73,7 +70,8 @@
         }
         .celebration h2 {
             color: #ff1493;
-            font-size: 28px;
+            font-size: 26px;
+            line-height: 1.5;
             animation: pulse 1s infinite alternate;
         }
         .heart-rain {
@@ -96,9 +94,9 @@
 
     <div class="container" id="mainBox">
         <h1>Mani sevasanmi? 🥺👉👈</h1>
-        <div class="buttons">
+        <div class="buttons-wrapper">
             <button id="yesBtn" onclick="showTabrik()">Ha 🥰</button>
-            <button id="noBtn" onmouseover="qoch()" ontouchstart="qoch()">Yo'q 😜</button>
+            <button id="noBtn" onmouseover="qoch()" ontouchstart="qoch(event)">Yo'q 😜</button>
         </div>
     </div>
 
@@ -113,29 +111,26 @@
         const mainBox = document.getElementById('mainBox');
         const tabrikBox = document.getElementById('tabrikBox');
 
-        // Yo'q tugmasini qochirish funksiyasi
-        function qoch() {
-            // Ekran o'lchamlarini olish
-            const padding = 60;
+        function qoch(event) {
+            if(event) event.preventDefault(); // Telefon ekranda bosganda sahifa qimirlamasligi uchun
+
+            const padding = 50;
+            // Ekran bo'yicha erkin qochish joyi
             const maxX = window.innerWidth - noBtn.offsetWidth - padding;
             const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
-            // Tasodifiy yangi koordinatalar (butun ekran bo'ylab)
             const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
             const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
-            // Tugmani mutloq pozitsiyaga o'tkazish va ko'chirish
+            // Qochganda element blokdan chiqib ketishi uchun fixed qilamiz
             noBtn.style.position = 'fixed';
             noBtn.style.left = randomX + 'px';
             noBtn.style.top = randomY + 'px';
         }
 
-        // Ha bosilganda tabrikni ko'rsatish
         function showTabrik() {
             mainBox.style.display = 'none';
             tabrikBox.style.display = 'flex';
-            
-            // Yuraklar yomg'irini yog'dirish
             setInterval(createHeart, 150);
         }
 
